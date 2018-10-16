@@ -17,5 +17,8 @@ class InventoryServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->make('ILabAfrica\Inventory\Controllers\SupplierController');
+        $this->app->make('ILabAfrica\Inventory\Controllers\ItemController');
+        $this->app->make('ILabAfrica\Inventory\Controllers\StockController');
+        $this->app->make('ILabAfrica\Inventory\Controllers\RequestController');
     }
 }

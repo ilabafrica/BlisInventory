@@ -5,21 +5,22 @@ namespace ILabAfrica\Inventory\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use ILabAfrica\Inventory\Models\Supplier;
+use ILabAfrica\Inventory\Models\ItemRequest;
+use Illuminate\Support\Facades\Auth;
 
-class SupplierController extends Controller
+class RequestController extends Controller
 {
     public function index(Request $request)
     {
         if ($request->query('search')) {
             $search = $request->query('search');
-            $supplier = Supplier::where('name', 'LIKE', "%{$search}%")
+            $item_reqest = ItemRequest::with('item', 'lab')->where('name', 'LIKE', "%{$search}%")
                 ->paginate(10);
         } else {
-            $supplier = Supplier::orderBy('id', 'ASC')->paginate(10);
+            $item_reqest = ItemRequest::with('item', 'lab')->orderBy('id', 'ASC')->paginate(10);
         }
 
-        return response()->json($supplier);
+        return response()->json($item_reqest);
     }
 
     /**
@@ -40,15 +41,18 @@ class SupplierController extends Controller
         if ($validator->fails()) {
             return response()->json($validator, 422);
         } else {
-            $supplier = new Supplier;
-            $supplier->name = $request->input('name');
-            $supplier->phone = $request->input('phone');
-            $supplier->email = $request->input('email');
-            $supplier->address = $request->input('address');
+            $item_reqest = new ItemRequest;
+            $item_reqest->item_id = $request->input('item_id');
+            $item_reqest->curr_bal = $request->input('curr_bal');
+            $item_reqest->lab_section_id = $request->input('lab_section_id');
+            $item_reqest->tests_done = $request->input('tests_done');
+            $item_reqest->quantity_requested = $request->input('quantity_requested');
+            $item_reqest->requested_by = Auth::guard('api')->user()->id;
+            $item_reqest->remarks = $request->input('remarks');
             try {
-                $supplier->save();
+                $item_reqest->save();
 
-                return response()->json($supplier);
+                return response()->json($item_reqest);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -63,9 +67,9 @@ class SupplierController extends Controller
      */
     public function show($id)
     {
-        $supplier = Supplier::findOrFail($id);
+        $item_reqest = ItemRequest::findOrFail($id);
 
-        return response()->json($supplier);
+        return response()->json($item_reqest);
     }
 
     /**
@@ -87,16 +91,18 @@ class SupplierController extends Controller
         if ($validator->fails()) {
             return response()->json($validator, 422);
         } else {
-            $supplier = Supplier::findOrFail($id);
-            $supplier->name = $request->input('name');
-            $supplier->phone = $request->input('phone');
-            $supplier->email = $request->input('email');
-            $supplier->address = $request->input('address');
+            $item_reqest = ItemRequest::findOrFail($id);
+            $item_reqest->item_id = $request->input('item_id');
+            $item_reqest->curr_bal = $request->input('curr_bal');
+            $item_reqest->lab_section_id = $request->input('lab_section_id');
+            $item_reqest->tests_done = $request->input('tests_done');
+            $item_reqest->quantity_requested = $request->input('quantity_requested');
+            $item_reqest->remarks = $request->input('remarks');
 
             try {
-                $supplier->save();
+                $item_reqest->save();
 
-                return response()->json($supplier);
+                return response()->json($item_reqest);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -112,10 +118,10 @@ class SupplierController extends Controller
     public function destroy($id)
     {
         try {
-            $supplier = Supplier::findOrFail($id);
-            $supplier->delete();
+            $item_reqest = Iitem_reqesttemRequest::findOrFail($id);
+            $item_reqest->delete();
 
-            return response()->json($supplier, 200);
+            return response()->json($item_reqest, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }

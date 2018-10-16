@@ -5,21 +5,21 @@ namespace ILabAfrica\Inventory\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use ILabAfrica\Inventory\Models\Supplier;
+use ILabAfrica\Inventory\Models\Item;
 
-class SupplierController extends Controller
+class ItemController extends Controller
 {
     public function index(Request $request)
     {
         if ($request->query('search')) {
             $search = $request->query('search');
-            $supplier = Supplier::where('name', 'LIKE', "%{$search}%")
+            $item = Item::where('name', 'LIKE', "%{$search}%")
                 ->paginate(10);
         } else {
-            $supplier = Supplier::orderBy('id', 'ASC')->paginate(10);
+            $item = Item::orderBy('id', 'ASC')->paginate(10);
         }
 
-        return response()->json($supplier);
+        return response()->json($item);
     }
 
     /**
@@ -40,15 +40,17 @@ class SupplierController extends Controller
         if ($validator->fails()) {
             return response()->json($validator, 422);
         } else {
-            $supplier = new Supplier;
-            $supplier->name = $request->input('name');
-            $supplier->phone = $request->input('phone');
-            $supplier->email = $request->input('email');
-            $supplier->address = $request->input('address');
+            $item = new Item;
+            $item->name = $request->input('name');
+            $item->unit = $request->input('unit');
+            $item->min = $request->input('min');
+            $item->max = $request->input('max');
+            $item->storage_req = $request->input('storage_req');
+            $item->remarks = $request->input('remarks');
             try {
-                $supplier->save();
+                $item->save();
 
-                return response()->json($supplier);
+                return response()->json($item);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -63,9 +65,9 @@ class SupplierController extends Controller
      */
     public function show($id)
     {
-        $supplier = Supplier::findOrFail($id);
+        $item = Item::findOrFail($id);
 
-        return response()->json($supplier);
+        return response()->json($item);
     }
 
     /**
@@ -87,16 +89,18 @@ class SupplierController extends Controller
         if ($validator->fails()) {
             return response()->json($validator, 422);
         } else {
-            $supplier = Supplier::findOrFail($id);
-            $supplier->name = $request->input('name');
-            $supplier->phone = $request->input('phone');
-            $supplier->email = $request->input('email');
-            $supplier->address = $request->input('address');
+            $item = Item::findOrFail($id);
+            $item->name = $request->input('name');
+            $item->unit = $request->input('unit');
+            $item->min = $request->input('min');
+            $item->max = $request->input('max');
+            $item->storage_req = $request->input('storage_req');
+            $item->remarks = $request->input('remarks');
 
             try {
-                $supplier->save();
+                $item->save();
 
-                return response()->json($supplier);
+                return response()->json($item);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -112,10 +116,10 @@ class SupplierController extends Controller
     public function destroy($id)
     {
         try {
-            $supplier = Supplier::findOrFail($id);
-            $supplier->delete();
+            $item = Supplier::findOrFail($id);
+            $item->delete();
 
-            return response()->json($supplier, 200);
+            return response()->json($item, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
