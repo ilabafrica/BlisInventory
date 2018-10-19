@@ -13,13 +13,16 @@ class ItemController extends Controller
     {
         if ($request->query('search')) {
             $search = $request->query('search');
-            $item = Item::where('name', 'LIKE', "%{$search}%")
+            $items = Item::with('stock')->where('name', 'LIKE', "%{$search}%")
                 ->paginate(10);
         } else {
-            $item = Item::orderBy('id', 'ASC')->paginate(10);
+            $items = Item::with('stock')->orderBy('id', 'ASC')->paginate(10);
+        }
+        foreach ($items as $key => $item) {
+            $item->stockValue = $item->stockValue ;
         }
 
-        return response()->json($item);
+        return response()->json($items);
     }
 
     /**
@@ -41,6 +44,7 @@ class ItemController extends Controller
             return response()->json($validator, 422);
         } else {
             $item = new Item;
+            $item->supplier_id = $request->input('supplier_id');
             $item->name = $request->input('name');
             $item->unit = $request->input('unit');
             $item->min = $request->input('min');

@@ -46,6 +46,7 @@ class StockController extends Controller
             $stock->expiry_date = $request->input('expiry_date');
             $stock->manufacturer = $request->input('manufacturer');
             $stock->supplier_id = $request->input('supplier_id');
+            $stock->item_id = $request->input('item_id');
             $stock->quantity_supplied = $request->input('quantity_supplied');
             $stock->cost_per_unit = $request->input('cost_per_unit');
             $stock->date_received = $request->input('date_received');
@@ -69,6 +70,13 @@ class StockController extends Controller
     public function show($id)
     {
         $stock = Stock::findOrFail($id);
+
+        return response()->json($stock);
+    }
+
+    public function stockDetails($id)
+    {
+        $stock = Stock::with('request')->whereItem_id($id)->get();
 
         return response()->json($stock);
     }

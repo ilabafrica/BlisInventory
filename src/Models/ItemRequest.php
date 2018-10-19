@@ -21,4 +21,14 @@ class ItemRequest extends Model
     {
         return $this->hasOne('App\Models\TestTypeCategory', 'id', 'lab_section_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'requested_by', 'id');
+    }
+
+    public function status()
+    {
+        return $this->hasOne('ILabAfrica\Inventory\Models\RequestStatus', 'id', 'status_id');
+    }
 }

@@ -14,10 +14,10 @@ class RequestController extends Controller
     {
         if ($request->query('search')) {
             $search = $request->query('search');
-            $item_reqest = ItemRequest::with('item', 'lab')->where('name', 'LIKE', "%{$search}%")
-                ->paginate(10);
+            $item_reqest = ItemRequest::with('item', 'lab', 'user', 'status')->where('name', 'LIKE', "%{$search}%")
+                ->get();
         } else {
-            $item_reqest = ItemRequest::with('item', 'lab')->orderBy('id', 'ASC')->paginate(10);
+            $item_reqest = ItemRequest::with('item', 'lab', 'user', 'status')->orderBy('id', 'ASC')->get();
         }
 
         return response()->json($item_reqest);
@@ -68,6 +68,13 @@ class RequestController extends Controller
     public function show($id)
     {
         $item_reqest = ItemRequest::findOrFail($id);
+
+        return response()->json($item_reqest);
+    }
+
+    public function requestIssue($id)
+    {
+        $item_reqest = ItemRequest::with('item', 'lab', 'user', 'status')->whereItem_id($id)->get();
 
         return response()->json($item_reqest);
     }
