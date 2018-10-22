@@ -50,7 +50,7 @@ class CreateInventoryTables extends Migration
             $table->integer('tests_done');
             $table->integer('quantity_requested');
             $table->integer('quantity_issued')->nullable()->default('0');
-            $table->integer('requested_by');
+            $table->integer('requested_by')->unsigned();
             $table->integer('issued_by')->nullable();
             $table->integer('status_id')->unsigned()->default('1');
             $table->string('remarks');
@@ -84,12 +84,12 @@ class CreateInventoryTables extends Migration
         Schema::create('stocks_issue_records', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('item_id')->unsigned();
-            $table->string('quantity_issued');
-            $table->string('date_issued');
-            $table->date('requested_by');
-            $table->string('issued_by');
-            $table->integer('received_by')->unsigned();
-            $table->integer('remarks')->unsigned();
+            $table->integer('quantity_issued');
+            $table->date('date_issued');
+            $table->integer('requested_by')->unsigned();
+            $table->integer('issued_by')->unsigned();
+            $table->string('received_by')->unsigned();
+            $table->string('remarks');
             $table->timestamps();
 
             $table->foreign('requested_by')->references('id')->on('users');

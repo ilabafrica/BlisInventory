@@ -74,7 +74,7 @@ class RequestController extends Controller
 
     public function requestIssue($id)
     {
-        $item_reqest = ItemRequest::with('item', 'lab', 'user', 'status')->whereItem_id($id)->get();
+        $item_reqest = ItemRequest::with('item', 'lab', 'user', 'status')->whereItem_id($id)->whereRaw('quantity_requested > quantity_issued')->get();
 
         return response()->json($item_reqest);
     }

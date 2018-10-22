@@ -16,10 +16,14 @@ class Item extends Model
 
 	public function getStockValueAttribute() {
 	  $stocks = $this->stock()->get();
-	  $total =0;
+	  
+	  $supplied = 0;
+	  $issued = 0;
 	  foreach ($stocks as $stock){
-	  	$total += $stock->quantity_supplied;
+	  	$supplied += $stock->quantity_supplied;
+	  	$issued += $stock->quantity_issued;
 	  }
+	  $total = $supplied-$issued;
 	  return $total;
 	}
 }
