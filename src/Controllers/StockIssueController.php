@@ -53,6 +53,9 @@ class StockIssueController extends Controller
             }
 
             $requestedItem->quantity_issued += $request->input('quantity');
+            if($requestedItem->quantity_issued >= $requestedItem->quantity_requested){
+                $requestedItem->status_id = 2;
+            }
             $requestedItem->save();
 
             $stockEntry->quantity_issued += $request->input('quantity');
