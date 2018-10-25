@@ -1,0 +1,17 @@
+{
+    "name": "ilabafrica/inventory",
+    "description": "Blis Package to handle lms inventory",
+    "authors": [
+        {
+            "name": "ilabafrica",
+            "email": "ilabafrica@strathmore.edu"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "ILabAfrica\\Inventory\\": "src/"
+        }
+    }
+}
