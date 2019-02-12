@@ -30,6 +30,7 @@ class CreateInventoryTables extends Migration
             $table->string('max');
             $table->string('storage_req');
             $table->string('remarks');
+
             $table->timestamps();
         });
 

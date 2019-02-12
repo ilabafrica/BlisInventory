@@ -14,6 +14,7 @@ class RequestController extends Controller
     {
         if ($request->query('search')) {
             $search = $request->query('search');
+
             $item_reqest = ItemRequest::where('name', 'LIKE', "%{$search}%")
                 ->paginate(10);
         } else {
@@ -51,6 +52,7 @@ class RequestController extends Controller
             $item_reqest->remarks = $request->input('remarks');
             try {
                 $item_reqest->save();
+
                 $item_reqest = ItemRequest::findOrFail($item_reqest->id);
 
                 return response()->json($item_reqest);

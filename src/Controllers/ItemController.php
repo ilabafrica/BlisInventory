@@ -44,6 +44,7 @@ class ItemController extends Controller
             return response()->json($validator, 422);
         } else {
             $item = new Item;
+
             $item->name = $request->input('name');
             $item->unit = $request->input('unit');
             $item->min = $request->input('min');
@@ -120,6 +121,7 @@ class ItemController extends Controller
     {
         try {
             $item = Item::findOrFail($id);
+
             $item->delete();
 
             return response()->json($item, 200);
